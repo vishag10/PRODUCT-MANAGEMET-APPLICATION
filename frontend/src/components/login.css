@@ -1,0 +1,146 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.navbar {
+    background-color: #4CAF50; 
+    padding: 15px; 
+    color: white; 
+    position: relative; 
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    max-width: 1200px; 
+    margin: auto; 
+}
+
+.navbar-brand {
+    font-size: 24px; 
+    font-weight: bold; 
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center; 
+}
+
+.username {
+    margin-right: 15px; 
+    font-size: 18px; 
+}
+
+.logout-button {
+    background-color: #f44336; 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    border-radius: 5px;
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+.logout-button:hover {
+    background-color: #d32f2f; 
+}
+
+.form-container {
+    max-width: 400px;
+    margin: 50px auto; 
+    padding: 20px;
+    background-color: white; 
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px; 
+}
+
+label {
+    display: block; 
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    font-size: 16px; 
+    transition: border-color 0.3s; 
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #4CAF50; 
+    outline: none; 
+}
+
+.submit-button {
+    margin-bottom: 3%;
+    width: 100%; 
+    background-color: #4CAF50; 
+    color: white;
+    border: none; 
+    padding: 10px;
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: background-color 0.3s; 
+}
+
+.submit-button:hover {
+    background-color: #45a049; 
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 15px; 
+}
+
+.register-link a {
+    color: #4CAF50; 
+    text-decoration: none; 
+}
+
+.register-link a:hover {
+    text-decoration: underline; 
+}
+.btna{
+    
+    
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s; 
+   
+    
+    margin-bottom: 4%;
+    margin-left: 10px;
+
+}
+span{
+    
+    font-size: 14px;
+    margin-left: 5%;
+    text-align: center;
+}
+.click{
+    margin-left: 2%;
+}
