@@ -26,38 +26,165 @@ function Products({ setID }) {
       setID(savedUser);
     }
 
-    // Load wishlist
+    // Load wishlist with enhanced error handling and timestamp support
     const savedWishlist = localStorage.getItem("wishlist");
     if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
+      try {
+        const parsedWishlist = JSON.parse(savedWishlist);
+        // Ensure all items have timestamps and unique identifiers
+        const enhancedWishlist = parsedWishlist.map(item => ({
+          ...item,
+          addedAt: item.addedAt || new Date().toISOString(),
+          wishlistId: item.wishlistId || `wishlist_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        }));
+        setWishlist(enhancedWishlist);
+        
+        // Save back the enhanced version if modifications were made
+        if (JSON.stringify(parsedWishlist) !== JSON.stringify(enhancedWishlist)) {
+          localStorage.setItem("wishlist", JSON.stringify(enhancedWishlist));
+        }
+      } catch (error) {
+        console.error("Error parsing wishlist:", error);
+        setWishlist([]);
+        localStorage.removeItem("wishlist");
+      }
     }
   }, [navigate, setID]);
 
+  // Save wishlist to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    if (wishlist.length >= 0) { // Only save if wishlist has been initialized
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
   }, [wishlist]);
 
   const addToWishlist = (product) => {
     const isAlreadyInWishlist = wishlist.some(item => item.id === product.id);
     if (!isAlreadyInWishlist) {
-      setWishlist([...wishlist, product]);
-      toast.success(`${product.name} added to wishlist!`);
+      const enhancedProduct = {
+        ...product,
+        addedAt: new Date().toISOString(),
+        wishlistId: `wishlist_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        addedFrom: 'products_page' // Track where item was added from
+      };
+      
+      const updatedWishlist = [...wishlist, enhancedProduct];
+      setWishlist(updatedWishlist);
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      
+      toast.success(`${product.name} added to wishlist!`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      // Log the addition with detailed information
+      console.log(`Product added to wishlist from Products page at ${new Date().toLocaleString()}:`, {
+        product: enhancedProduct.name,
+        price: enhancedProduct.price,
+        category: enhancedProduct.category,
+        addedAt: enhancedProduct.addedAt,
+        wishlistId: enhancedProduct.wishlistId
+      });
     } else {
-      toast.info(`${product.name} is already in your wishlist!`);
+      const existingItem = wishlist.find(item => item.id === product.id);
+      toast.info(`${product.name} is already in your wishlist!`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      
+      // Log the duplicate attempt
+      if (existingItem) {
+        console.log(`Duplicate add attempt for product already in wishlist since ${new Date(existingItem.addedAt).toLocaleString()}:`, product.name);
+      }
     }
   };
 
+  const removeFromWishlist = (productId) => {
+    const productToRemove = wishlist.find(item => item.id === productId);
+    const updatedWishlist = wishlist.filter(item => item.id !== productId);
+    
+    setWishlist(updatedWishlist);
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+    
+    toast.success("Product removed from wishlist!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+
+    // Log the removal with detailed timestamp info
+    if (productToRemove) {
+      const timeInWishlist = new Date() - new Date(productToRemove.addedAt);
+      const daysInWishlist = Math.floor(timeInWishlist / (1000 * 60 * 60 * 24));
+      const hoursInWishlist = Math.floor((timeInWishlist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutesInWishlist = Math.floor((timeInWishlist % (1000 * 60 * 60)) / (1000 * 60));
+      
+      console.log(`Product removed from wishlist from Products page:`, {
+        product: productToRemove.name,
+        addedAt: new Date(productToRemove.addedAt).toLocaleString(),
+        removedAt: new Date().toLocaleString(),
+        timeInWishlist: `${daysInWishlist} days, ${hoursInWishlist} hours, ${minutesInWishlist} minutes`,
+        addedFrom: productToRemove.addedFrom || 'unknown'
+      });
+    }
+  };
+
+  // Get category-wise wishlist statistics
+  const getCategoryStats = () => {
+    const categoryCount = {};
+    wishlist.forEach(item => {
+      categoryCount[item.category] = (categoryCount[item.category] || 0) + 1;
+    });
+    return categoryCount;
+  };
+
+  // Get recent wishlist activity
+  const getRecentActivity = () => {
+    const recent = [...wishlist]
+      .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt))
+      .slice(0, 3);
+    return recent;
+  };
+
   const categories = ["All", "Smartphones", "Laptops", "Audio", "Tablets", "Wearables", "Gaming"];
+  const categoryStats = getCategoryStats();
+  const recentActivity = getRecentActivity();
+
+  // Log category statistics when wishlist changes
+  useEffect(() => {
+    if (wishlist.length > 0) {
+      console.log("Wishlist category breakdown:", categoryStats);
+      console.log("Recent wishlist activity:", recentActivity.map(item => ({
+        name: item.name,
+        addedAt: new Date(item.addedAt).toLocaleString(),
+        category: item.category
+      })));
+    }
+  }, [wishlist]);
 
   return (
     <>
       <ToastContainer />
-      <Nav user={user} setID={setID} />
+      <Nav user={user} setID={setID} wishlistCount={wishlist.length} />
       
       <div className="products-page">
         <div className="products-header">
           <h1>Electronic Products</h1>
           <p>Browse our collection of premium electronic devices</p>
+          
+          {wishlist.length > 0 && (
+            <div className="wishlist-summary">
+              <p>You have {wishlist.length} items in your wishlist</p>
+              {recentActivity.length > 0 && (
+                <div className="recent-additions">
+                  <small>Recently added: {recentActivity[0].name}</small>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="filters-section">
@@ -70,13 +197,29 @@ function Products({ setID }) {
                 onClick={() => setSelectedCategory(category)}
               >
                 {category}
+                {categoryStats[category] && (
+                  <span className="category-wishlist-count">
+                    ({categoryStats[category]} in wishlist)
+                  </span>
+                )}
               </button>
             ))}
           </div>
+          
+          {Object.keys(categoryStats).length > 0 && (
+            <div className="category-summary">
+              <small>
+                Wishlist breakdown: {Object.entries(categoryStats)
+                  .map(([cat, count]) => `${cat}: ${count}`)
+                  .join(', ')}
+              </small>
+            </div>
+          )}
         </div>
 
         <ProductList 
           addToWishlist={addToWishlist} 
+          removeFromWishlist={removeFromWishlist}
           wishlist={wishlist}
           selectedCategory={selectedCategory}
         />

@@ -1,7 +1,13 @@
 import React from "react";
 import "./products.css";
 
-const ProductList = ({ addToWishlist, wishlist, showTitle = false }) => {
+const ProductList = ({ 
+  addToWishlist, 
+  removeFromWishlist, 
+  wishlist, 
+  showTitle = false, 
+  selectedCategory = "All" 
+}) => {
   const products = [
     {
       id: 1,
@@ -66,11 +72,40 @@ const ProductList = ({ addToWishlist, wishlist, showTitle = false }) => {
       image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=300&h=300&fit=crop",
       description: "Hybrid gaming console with vibrant OLED screen",
       category: "Gaming"
+    },
+    {
+      id: 9,
+      name: "AirPods Pro 2",
+      price: 249,
+      image: "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=300&h=300&fit=crop",
+      description: "Premium wireless earbuds with active noise cancellation",
+      category: "Audio"
+    },
+    {
+      id: 10,
+      name: "Surface Pro 9",
+      price: 1299,
+      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop",
+      description: "Versatile 2-in-1 laptop tablet with touchscreen",
+      category: "Tablets"
     }
   ];
 
+  // Filter products based on selected category
+  const filteredProducts = selectedCategory === "All" 
+    ? products 
+    : products.filter(product => product.category === selectedCategory);
+
   const isInWishlist = (productId) => {
     return wishlist.some(item => item.id === productId);
+  };
+
+  const handleWishlistToggle = (product) => {
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   return (
@@ -78,11 +113,18 @@ const ProductList = ({ addToWishlist, wishlist, showTitle = false }) => {
       {showTitle && <h2 className="section-title">Featured Products</h2>}
       
       <div className="products-grid">
-        {products.map(product => (
+        {filteredProducts.map(product => (
           <div key={product.id} className="product-card">
             <div className="product-image">
               <img src={product.image} alt={product.name} />
               <div className="product-category">{product.category}</div>
+              <button 
+                className={`wishlist-toggle ${isInWishlist(product.id) ? 'active' : ''}`}
+                onClick={() => handleWishlistToggle(product)}
+                title={isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+              >
+                {isInWishlist(product.id) ? '❤️' : '🤍'}
+              </button>
             </div>
             
             <div className="product-info">
@@ -93,8 +135,7 @@ const ProductList = ({ addToWishlist, wishlist, showTitle = false }) => {
               <div className="product-actions">
                 <button 
                   className={`wishlist-btn ${isInWishlist(product.id) ? 'in-wishlist' : ''}`}
-                  onClick={() => addToWishlist(product)}
-                  disabled={isInWishlist(product.id)}
+                  onClick={() => handleWishlistToggle(product)}
                 >
                   {isInWishlist(product.id) ? '❤️ In Wishlist' : '🤍 Add to Wishlist'}
                 </button>
@@ -104,6 +145,13 @@ const ProductList = ({ addToWishlist, wishlist, showTitle = false }) => {
           </div>
         ))}
       </div>
+      
+      {filteredProducts.length === 0 && (
+        <div className="no-products">
+          <h3>No products found in this category</h3>
+          <p>Try selecting a different category or browse all products.</p>
+        </div>
+      )}
     </div>
   );
 };

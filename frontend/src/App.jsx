@@ -7,7 +7,7 @@ import Login from "./components/login";
 import Register from "./components/register";
 import Nav from "./components/nav";
 import Products from "./components/Products";
-import Wishlist from "./components/Wishlist";
+import Wishlist from "./components/wishlist";
 
 const ThemeContext = createContext(null);
 
