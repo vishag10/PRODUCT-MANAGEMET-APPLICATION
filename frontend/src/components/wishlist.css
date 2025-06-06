@@ -1,4 +1,4 @@
-/* Wishlist Page Styles */
+
 .wishlist-page {
     max-width: 1200px;
     margin: 0 auto;
@@ -6,7 +6,6 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
-/* Header Section */
 .wishlist-header {
     text-align: center;
     margin-bottom: 40px;
@@ -30,7 +29,6 @@
     margin-bottom: 20px;
 }
 
-/* Wishlist Stats */
 .wishlist-stats {
     display: flex;
     justify-content: center;
@@ -67,7 +65,6 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* Empty Wishlist State */
 .empty-wishlist {
     text-align: center;
     padding: 80px 20px;
@@ -115,7 +112,7 @@
     color: white;
 }
 
-/* Wishlist Controls */
+
 .wishlist-controls {
     background: white;
     padding: 25px;
@@ -154,7 +151,6 @@
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
-/* Wishlist Insights */
 .wishlist-insights {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     padding: 20px;
@@ -174,7 +170,7 @@
     font-weight: 600;
 }
 
-/* Wishlist Grid */
+
 .wishlist-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -182,7 +178,7 @@
     margin-bottom: 40px;
 }
 
-/* Wishlist Items */
+
 .wishlist-item {
     background: white;
     border-radius: 15px;
@@ -198,7 +194,7 @@
     box-shadow: 0 12px 35px rgba(0,0,0,0.15);
 }
 
-/* Product Image */
+
 .wishlist-item .product-image {
     position: relative;
     height: 200px;
@@ -243,7 +239,7 @@
     box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
 }
 
-/* Product Info */
+
 .wishlist-item .product-info {
     padding: 20px;
 }
@@ -307,7 +303,7 @@
     border-radius: 4px;
 }
 
-/* Product Actions */
+
 .wishlist-item .product-actions {
     display: flex;
     gap: 8px;
@@ -350,7 +346,7 @@
     transform: translateY(-1px);
 }
 
-/* Wishlist Actions */
+
 .wishlist-actions {
     display: flex;
     justify-content: center;
@@ -402,7 +398,7 @@
     box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .wishlist-page {
         padding: 15px;
@@ -498,7 +494,7 @@
     }
 }
 
-/* Loading States and Animations */
+
 .wishlist-item {
     animation: fadeInUp 0.6s ease-out;
 }
@@ -514,7 +510,7 @@
     }
 }
 
-/* Focus States for Accessibility */
+
 .buy-btn:focus,
 .move-to-cart-btn:focus,
 .clear-btn:focus,
@@ -526,7 +522,7 @@
     outline-offset: 2px;
 }
 
-/* Hover Effects for Better UX */
+
 .wishlist-item .product-category:hover {
     background: #bbdefb;
     transform: scale(1.05);

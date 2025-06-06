@@ -76,7 +76,7 @@ body {
     border-radius: 50%;
 }
 
-/* New styles for the updated home page */
+
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -346,7 +346,6 @@ body {
     object-fit: cover;
 }
 
-/* Main content styles */
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -434,7 +433,7 @@ body {
     border-radius: 2px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .navbar-container {
         flex-direction: column;

@@ -79,9 +79,7 @@ function Login() {
           <Link to={"/register"}>
             <span className="click">Click here</span>
           </Link>
-          <Link to={"/"}>
-            <span className="btna">Home</span>
-          </Link>
+          
         </span>
       </div>
     </>

@@ -12,26 +12,26 @@ function Products({ setID }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    // Check if user is logged in
+   
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
     }
 
-    // Get user info from localStorage or make API call
+  
     const savedUser = localStorage.getItem("currentUser");
     if (savedUser) {
       setUser(savedUser);
       setID(savedUser);
     }
 
-    // Load wishlist with enhanced error handling and timestamp support
+    
     const savedWishlist = localStorage.getItem("wishlist");
     if (savedWishlist) {
       try {
         const parsedWishlist = JSON.parse(savedWishlist);
-        // Ensure all items have timestamps and unique identifiers
+       
         const enhancedWishlist = parsedWishlist.map(item => ({
           ...item,
           addedAt: item.addedAt || new Date().toISOString(),
@@ -39,7 +39,7 @@ function Products({ setID }) {
         }));
         setWishlist(enhancedWishlist);
         
-        // Save back the enhanced version if modifications were made
+     
         if (JSON.stringify(parsedWishlist) !== JSON.stringify(enhancedWishlist)) {
           localStorage.setItem("wishlist", JSON.stringify(enhancedWishlist));
         }
@@ -51,9 +51,9 @@ function Products({ setID }) {
     }
   }, [navigate, setID]);
 
-  // Save wishlist to localStorage whenever it changes
+ 
   useEffect(() => {
-    if (wishlist.length >= 0) { // Only save if wishlist has been initialized
+    if (wishlist.length >= 0) { 
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
     }
   }, [wishlist]);
@@ -65,7 +65,7 @@ function Products({ setID }) {
         ...product,
         addedAt: new Date().toISOString(),
         wishlistId: `wishlist_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        addedFrom: 'products_page' // Track where item was added from
+        addedFrom: 'products_page' 
       };
       
       const updatedWishlist = [...wishlist, enhancedProduct];
@@ -81,7 +81,7 @@ function Products({ setID }) {
         draggable: true,
       });
 
-      // Log the addition with detailed information
+      
       console.log(`Product added to wishlist from Products page at ${new Date().toLocaleString()}:`, {
         product: enhancedProduct.name,
         price: enhancedProduct.price,
@@ -96,7 +96,7 @@ function Products({ setID }) {
         autoClose: 3000,
       });
       
-      // Log the duplicate attempt
+      
       if (existingItem) {
         console.log(`Duplicate add attempt for product already in wishlist since ${new Date(existingItem.addedAt).toLocaleString()}:`, product.name);
       }
@@ -115,7 +115,7 @@ function Products({ setID }) {
       autoClose: 3000,
     });
 
-    // Log the removal with detailed timestamp info
+  
     if (productToRemove) {
       const timeInWishlist = new Date() - new Date(productToRemove.addedAt);
       const daysInWishlist = Math.floor(timeInWishlist / (1000 * 60 * 60 * 24));
@@ -132,7 +132,7 @@ function Products({ setID }) {
     }
   };
 
-  // Get category-wise wishlist statistics
+  
   const getCategoryStats = () => {
     const categoryCount = {};
     wishlist.forEach(item => {
@@ -141,7 +141,7 @@ function Products({ setID }) {
     return categoryCount;
   };
 
-  // Get recent wishlist activity
+
   const getRecentActivity = () => {
     const recent = [...wishlist]
       .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt))
@@ -153,7 +153,7 @@ function Products({ setID }) {
   const categoryStats = getCategoryStats();
   const recentActivity = getRecentActivity();
 
-  // Log category statistics when wishlist changes
+ 
   useEffect(() => {
     if (wishlist.length > 0) {
       console.log("Wishlist category breakdown:", categoryStats);

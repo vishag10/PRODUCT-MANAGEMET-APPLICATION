@@ -8,29 +8,29 @@ function Wishlist({ setID }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [wishlist, setWishlist] = useState([]);
-  const [sortBy, setSortBy] = useState('newest'); // newest, oldest, name, price
+  const [sortBy, setSortBy] = useState('newest'); 
 
   useEffect(() => {
-    // Check if user is logged in
+    
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
     }
 
-    // Get user info
+   
     const savedUser = localStorage.getItem("currentUser");
     if (savedUser) {
       setUser(savedUser);
       setID(savedUser);
     }
 
-    // Load wishlist with enhanced error handling
+    
     const savedWishlist = localStorage.getItem("wishlist");
     if (savedWishlist) {
       try {
         const parsedWishlist = JSON.parse(savedWishlist);
-        // Ensure all items have timestamps
+   
         const enhancedWishlist = parsedWishlist.map(item => ({
           ...item,
           addedAt: item.addedAt || new Date().toISOString(),
@@ -38,7 +38,7 @@ function Wishlist({ setID }) {
         }));
         setWishlist(enhancedWishlist);
         
-        // Save back the enhanced version if it was modified
+      
         if (JSON.stringify(parsedWishlist) !== JSON.stringify(enhancedWishlist)) {
           localStorage.setItem("wishlist", JSON.stringify(enhancedWishlist));
         }
@@ -62,7 +62,7 @@ function Wishlist({ setID }) {
       autoClose: 3000,
     });
 
-    // Log the removal with detailed timestamp info
+   
     if (productToRemove) {
       const timeInWishlist = new Date() - new Date(productToRemove.addedAt);
       const daysInWishlist = Math.floor(timeInWishlist / (1000 * 60 * 60 * 24));
@@ -88,7 +88,7 @@ function Wishlist({ setID }) {
         autoClose: 3000,
       });
 
-      // Log detailed clearing information
+      
       console.log(`Wishlist cleared at ${new Date().toLocaleString()}:`);
       clearedItems.forEach(item => {
         const timeInWishlist = new Date() - new Date(item.addedAt);

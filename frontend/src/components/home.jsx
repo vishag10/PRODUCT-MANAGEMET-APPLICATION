@@ -50,20 +50,19 @@ function Home({ setID }) {
     }
   };
 
-  // Load wishlist from localStorage with enhanced data structure
   useEffect(() => {
     const savedWishlist = localStorage.getItem("wishlist");
     if (savedWishlist) {
       try {
         const parsedWishlist = JSON.parse(savedWishlist);
-        // Ensure all items have timestamps
+
         const enhancedWishlist = parsedWishlist.map(item => ({
           ...item,
-          addedAt: item.addedAt || new Date().toISOString(), // Add timestamp if missing
-          id: item.id || Date.now() + Math.random() // Ensure unique ID
+          addedAt: item.addedAt || new Date().toISOString(), 
+          id: item.id || Date.now() + Math.random() 
         }));
         setWishlist(enhancedWishlist);
-        // Save back the enhanced version
+       
         localStorage.setItem("wishlist", JSON.stringify(enhancedWishlist));
       } catch (error) {
         console.error("Error parsing wishlist:", error);
@@ -72,9 +71,9 @@ function Home({ setID }) {
     }
   }, []);
 
-  // Save wishlist to localStorage whenever it changes
+
   useEffect(() => {
-    if (wishlist.length >= 0) { // Only save if wishlist has been initialized
+    if (wishlist.length >= 0) { 
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
     }
   }, [wishlist]);
@@ -101,7 +100,7 @@ function Home({ setID }) {
         draggable: true,
       });
 
-      // Log the addition with timestamp
+  
       console.log(`Product added to wishlist at ${new Date().toLocaleString()}:`, enhancedProduct);
     } else {
       toast.info(`${product.name} is already in your wishlist!`, {
@@ -123,7 +122,7 @@ function Home({ setID }) {
       autoClose: 3000,
     });
 
-    // Log the removal with timestamp
+   
     if (productToRemove) {
       console.log(`Product removed from wishlist at ${new Date().toLocaleString()}:`, {
         product: productToRemove.name,
@@ -133,7 +132,7 @@ function Home({ setID }) {
     }
   };
 
-  // Clear entire wishlist with confirmation
+
   const clearWishlist = () => {
     if (window.confirm(`Are you sure you want to clear all ${wishlist.length} items from your wishlist?`)) {
       const clearedItems = [...wishlist];
@@ -145,12 +144,12 @@ function Home({ setID }) {
         autoClose: 3000,
       });
 
-      // Log the clearing with timestamp
+      
       console.log(`Wishlist cleared at ${new Date().toLocaleString()}. Removed ${clearedItems.length} items:`, clearedItems);
     }
   };
 
-  // Get wishlist statistics
+ 
   const getWishlistStats = () => {
     if (wishlist.length === 0) return null;
 
@@ -177,7 +176,7 @@ function Home({ setID }) {
     getUser();
   }, []);
 
-  // Log wishlist stats on component mount and wishlist changes
+ 
   useEffect(() => {
     const stats = getWishlistStats();
     if (stats) {

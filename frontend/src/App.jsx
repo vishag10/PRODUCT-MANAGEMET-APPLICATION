@@ -8,13 +8,15 @@ import Register from "./components/register";
 import Nav from "./components/nav";
 import Products from "./components/Products";
 import Wishlist from "./components/wishlist";
+import ProductDetails from "./components/ProductDetails";
+
 
 const ThemeContext = createContext(null);
 
 function App(){
   const [user, setID] = useState(null);
 
-  // Check if user is logged in on app load
+ 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const savedUser = localStorage.getItem("currentUser");
@@ -24,7 +26,7 @@ function App(){
     }
   }, []);
 
-  // Save current user to localStorage whenever user state changes
+
   useEffect(() => {
     if (user) {
       localStorage.setItem("currentUser", user);
@@ -43,6 +45,7 @@ function App(){
             <Route path="/register" element={<Register/>} />
             <Route path="/products" element={<Products setID={setID} />} />
             <Route path="/wishlist" element={<Wishlist setID={setID} />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="*" element={
               <div style={{
                 display: 'flex',
